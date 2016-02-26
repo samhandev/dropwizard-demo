@@ -1,6 +1,6 @@
 ---
 applications:
-- name: sam-hello
+- name: drop-wizard-example
   instances: 1
   memory: 512M
   path: ./target/productdemo-1.0-SNAPSHOT.jar
