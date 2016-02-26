@@ -1,9 +1,11 @@
 package com.darrencoxall.demo.productdemo;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import de.thomaskrille.dropwizard_template_config.TemplateConfigBundle;
 import io.dropwizard.Application;
 import io.dropwizard.Configuration;
 import io.dropwizard.jdbi.DBIFactory;
+import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.skife.jdbi.v2.DBI;
 
@@ -15,7 +17,15 @@ public class DemoApplication extends Application<ApplicationConfiguration> {
 
     public static void main(String[] args) throws Exception {
         Application<? extends Configuration> application = new DemoApplication();
+        if (args == null || args.length == 0) {
+            args = new String[] { "server", ClassLoader.getSystemResource("./config.yml").getFile() };
+        }
         application.run(args);
+    }
+
+    @Override
+    public void initialize(final Bootstrap<ApplicationConfiguration> bootstrap) {
+        bootstrap.addBundle(new TemplateConfigBundle());
     }
 
     @Override
@@ -29,6 +39,7 @@ public class DemoApplication extends Application<ApplicationConfiguration> {
         environment.lifecycle().manage(databaseManager);
         environment.healthChecks().register("product_data", databaseManager);
         environment.jersey().register(new ProductResource(productDAO));
+        environment.jersey().register(new CategoryResource());
 
         // I like my json to use underscores
         environment.getObjectMapper().setPropertyNamingStrategy(

@@ -1,0 +1,7 @@
+---
+applications:
+- name: sam-hello
+  instances: 1
+  memory: 512M
+  path: ./target/productdemo-1.0-SNAPSHOT.jar
+  buildpack: java_buildpack
