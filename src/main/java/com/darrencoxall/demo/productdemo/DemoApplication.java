@@ -39,7 +39,6 @@ public class DemoApplication extends Application<ApplicationConfiguration> {
         environment.lifecycle().manage(databaseManager);
         environment.healthChecks().register("product_data", databaseManager);
         environment.jersey().register(new ProductResource(productDAO));
-        environment.jersey().register(new CategoryResource());
 
         // I like my json to use underscores
         environment.getObjectMapper().setPropertyNamingStrategy(
